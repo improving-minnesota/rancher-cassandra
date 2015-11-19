@@ -13,8 +13,8 @@ if [ "$1" = 'cassandra' ]; then
 	if [ "$CASSANDRA_LISTEN_ADDRESS" = 'auto' ]; then
 		CASSANDRA_LISTEN_ADDRESS="$(hostname --ip-address)"
 	fi
-  if [ "$CASSANDRA_LISTEN_ADDRESS" = 'rancher' ]; then
-		CASSANDRA_LISTEN_ADDRESS="$(curl http://rancher-metadata/2015-07-25/self/container/primary_ip)"
+	if [ "$CASSANDRA_LISTEN_ADDRESS" = 'rancher' ]; then
+		CASSANDRA_LISTEN_ADDRESS="$(curl --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
 	fi
 
 	: ${CASSANDRA_BROADCAST_ADDRESS="$CASSANDRA_LISTEN_ADDRESS"}
@@ -22,8 +22,8 @@ if [ "$1" = 'cassandra' ]; then
 	if [ "$CASSANDRA_BROADCAST_ADDRESS" = 'auto' ]; then
 		CASSANDRA_BROADCAST_ADDRESS="$(hostname --ip-address)"
 	fi
-  if [ "$CASSANDRA_BROADCAST_ADDRESS" = 'rancher' ]; then
-		CASSANDRA_BROADCAST_ADDRESS="$(curl http://rancher-metadata/2015-07-25/self/container/primary_ip)"
+	if [ "$CASSANDRA_BROADCAST_ADDRESS" = 'rancher' ]; then
+		CASSANDRA_BROADCAST_ADDRESS="$(curl --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
 	fi
 	: ${CASSANDRA_BROADCAST_RPC_ADDRESS:=$CASSANDRA_BROADCAST_ADDRESS}
 
