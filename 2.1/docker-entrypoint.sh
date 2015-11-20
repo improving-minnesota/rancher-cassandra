@@ -7,6 +7,8 @@ if [ "${1:0:1}" = '-' ]; then
 fi
 
 if [ "$1" = 'cassandra' ]; then
+	# Just give the Rancher Metadata API a second to be ready
+	sleep 1
 	: ${CASSANDRA_RPC_ADDRESS='0.0.0.0'}
 
 	: ${CASSANDRA_LISTEN_ADDRESS='auto'}
@@ -14,7 +16,7 @@ if [ "$1" = 'cassandra' ]; then
 		CASSANDRA_LISTEN_ADDRESS="$(hostname --ip-address)"
 	fi
 	if [ "$CASSANDRA_LISTEN_ADDRESS" = 'rancher' ]; then
-		CASSANDRA_LISTEN_ADDRESS="$(curl --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
+		CASSANDRA_LISTEN_ADDRESS="$(curl --fail --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
 	fi
 
 	: ${CASSANDRA_BROADCAST_ADDRESS="$CASSANDRA_LISTEN_ADDRESS"}
@@ -23,7 +25,7 @@ if [ "$1" = 'cassandra' ]; then
 		CASSANDRA_BROADCAST_ADDRESS="$(hostname --ip-address)"
 	fi
 	if [ "$CASSANDRA_BROADCAST_ADDRESS" = 'rancher' ]; then
-		CASSANDRA_BROADCAST_ADDRESS="$(curl --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
+		CASSANDRA_BROADCAST_ADDRESS="$(curl --fail --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
 	fi
 	: ${CASSANDRA_BROADCAST_RPC_ADDRESS:=$CASSANDRA_BROADCAST_ADDRESS}
 
