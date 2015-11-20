@@ -23,7 +23,7 @@ if [ "$1" = 'cassandra' ]; then
 		CASSANDRA_BROADCAST_ADDRESS="$(hostname --ip-address)"
 	fi
 	if [ "$CASSANDRA_BROADCAST_ADDRESS" = 'rancher' ]; then
-		echo "*****Setting BROADCAST"
+		sleep 5
 		curl -v http://rancher-metadata/2015-07-25/self/container/primary_ip
 		CASSANDRA_BROADCAST_ADDRESS="$(curl --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
 		echo "*****$CASSANDRA_BROADCAST_ADDRESS"
@@ -53,7 +53,6 @@ if [ "$1" = 'cassandra' ]; then
 			sed -ri 's/^(# )?('"$yaml"':).*/\2 '"$val"'/' "$CASSANDRA_CONFIG/cassandra.yaml"
 		fi
 	done
-	cat $CASSANDRA_CONFIG/cassandra.yaml | grep broadcast
 
 	for rackdc in dc rack; do
 		var="CASSANDRA_${rackdc^^}"
