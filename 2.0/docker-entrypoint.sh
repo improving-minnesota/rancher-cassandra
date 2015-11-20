@@ -24,6 +24,7 @@ if [ "$1" = 'cassandra' ]; then
 	fi
 	if [ "$CASSANDRA_BROADCAST_ADDRESS" = 'rancher' ]; then
 		echo "*****Setting BROADCAST"
+		curl -v http://rancher-metadata/2015-07-25/self/container/primary_ip
 		CASSANDRA_BROADCAST_ADDRESS="$(curl --silent http://rancher-metadata/2015-07-25/self/container/primary_ip)"
 		echo "*****$CASSANDRA_BROADCAST_ADDRESS"
 	fi
